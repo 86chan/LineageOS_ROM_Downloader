@@ -55,7 +55,7 @@ jobs:
       # プロジェクトを特定のランタイム向けに発行
       # プロジェクトファイルはワイルドカードで指定し、パスの変更に強くする
       # 出力先もランタイムごとに分ける
-      run: dotnet publish $PROJ -c Release -r ${{ matrix.rid }}
+      run: dotnet publish $PROJ -c Release -r ${{ matrix.rid }} -o ./publish/${{ matrix.rid }}
       
     - name: Upload Artifact
       # ランタイムごとに個別の成果物としてアップロード
