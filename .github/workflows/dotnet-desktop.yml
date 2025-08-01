@@ -99,11 +99,11 @@ jobs:
       # Termuxのビルド環境を再現したDockerコンテナ内でビルドを実行
       run: |
         docker run --rm --privileged \
+            -v "$(pwd)":/src \
             -u "$(id -u $USER):$(id -g $USER)" \
             -v /etc/passwd:/etc/passwd:ro \
             -v /etc/group:/etc/group:ro \
             -it $USER \
-            -v "$(pwd)":/src \
                termux/termux-docker:aarch64 \
             /bin/bash -c \
          "pkg update -y && \
