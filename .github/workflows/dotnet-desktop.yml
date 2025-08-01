@@ -102,10 +102,6 @@ jobs:
                    --privileged \
                    -v "$(pwd)":/src \
                    termux/termux-docker:aarch64 \
-                   -v /etc/passwd:/data/data/com.termux/files/usr/etc/passwd:ro \
-                   -v /etc/group:/data/data/com.termux/files/usr/etc/group:ro \
-                   -u "$(id -u $USER):$(id -g $USER)" \
-                   -it $USER \
                     /bin/bash -c \
                     "pkg update -y && \
                     pkg install -y dotnet-sdk-9.0  && \
