@@ -102,7 +102,7 @@ jobs:
             -u "$(id -u $USER):$(id -g $USER)" \
             -v /etc/passwd:/etc/passwd:ro \
             -v /etc/group:/etc/group:ro \
-            -it $USER
+            -it $USER \
             -v "$(pwd)":/src \
                termux/termux-docker:aarch64 \
             /bin/bash -c \
