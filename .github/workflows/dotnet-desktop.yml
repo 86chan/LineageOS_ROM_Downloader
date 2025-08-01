@@ -91,9 +91,10 @@ jobs:
     - name: Build using Termux Docker container
       # Termuxのビルド環境を再現したDockerコンテナ内でビルドを実行
       run: |
-        docker run --rm --entrypoint /bin/bash -v "$(pwd)":/src termux/termux-docker:aarch64 /bin/bash -c \
-        "pkg update -y && \
-         pkg install -y dotnet-sdk-9 && \
+        docker run --rm --platform linux/arm64 -v "$(pwd)":/src termux/termux-docker:aarch64 /bin/bash -c \
+        "termux-change-repo && \
+         pkg update -y && \
+         pkg install -y dotnet-sdk && \
          cd /src && \
          dotnet publish src/LineageOS_ROM_Downloader/LineageOS_ROM_Downloader.csproj -c Release -r linux-arm64 -o ./publish/termux-arm64"
 
