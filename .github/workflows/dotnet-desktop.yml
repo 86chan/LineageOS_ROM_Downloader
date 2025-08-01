@@ -101,6 +101,7 @@ jobs:
         docker run --rm --platform linux/arm64 -e TERM=xterm -v "$(pwd)":/src \
         --entrypoint /data/data/com.termux/files/usr/bin/bash termux/termux-docker:aarch64 -c \
          "chown -R root /src && \
+         sed -i 's/exit 1/echo \"Warning: Bypassing root check for pkg.\"/g' /data/data/com.termux/files/usr/bin/pkg && \
          pkg update -y && \
          pkg install -y dotnet-sdk-9.0  && \
          cd /src && \
