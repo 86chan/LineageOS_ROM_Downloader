@@ -98,8 +98,14 @@ jobs:
     - name: Build using Termux Docker container
       # Termuxのビルド環境を再現したDockerコンテナ内でビルドを実行
       run: |
-        chmod 777 -R "$(pwd)"/src && \
-        docker run --rm --privileged -v "$(pwd)":/src termux/termux-docker:aarch64 /bin/bash -c \
+        docker run --rm --privileged \
+            -v "$(pwd)":/src \
+               termux/termux-docker:aarch64 \
+            -u "$(id -u $USER):$(id -g $USER)" \
+            -v /etc/passwd:/etc/passwd:ro \
+            -v /etc/group:/etc/group:ro \
+            -it $USER
+            /bin/bash -c \
          "pkg update -y && \
          pkg install -y dotnet-sdk-9.0  && \
          chmod 777 -R /src
