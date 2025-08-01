@@ -45,6 +45,9 @@ jobs:
       matrix:
         # 'all', 'release-push', またはタグプッシュの場合は全ランタイムを、それ以外は選択されたランタイムをビルド対象にする
         rid: ${{ (startsWith(github.ref, 'refs/tags/') || github.event.inputs.target_runtime == 'all' || github.event.inputs.target_runtime == 'release-push') && fromJSON('["win-x64", "win-x86", "win-arm64", "linux-x64", "linux-arm64", "osx-x64", "osx-arm64"]') || fromJSON(format('["{0}"]', github.event.inputs.target_runtime)) }}
+    
+    env:
+      PROJ: "/home/runner/work/LineageOS_ROM_Downloader/LineageOS_ROM_Downloader/src/LineageOS_ROM_Downloader/LineageOS_ROM_Downloader.csproj"
 
     steps:
     - name: Checkout repository
@@ -60,7 +63,8 @@ jobs:
     - name: Publish application
       # プロジェクトを特定のランタイム向けに発行
       # プロジェクトファイルはワイルドカードで指定し、パスの変更に強くする
-      run: dotnet publish "**/*.csproj" -c Release -r ${{ matrix.rid }} --self-contained true -o ./publish/${{ matrix.rid }}
+      # 出力先もランタイムごとに分ける
+      run: dotnet publish $PROJ -c Release -r ${{ matrix.rid }} -o ./publish/${{ matrix.rid }}
       
     - name: Upload Artifact
       # ランタイムごとに個別の成果物としてアップロード
