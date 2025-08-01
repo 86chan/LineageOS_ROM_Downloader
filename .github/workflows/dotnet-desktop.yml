@@ -101,10 +101,10 @@ jobs:
         docker run --rm \
                    --privileged \
                    termux/termux-docker:aarch64 \
-                   -u "$(id -u $USER):$(id -g $USER)" \
                    -v "$(pwd)":/src \
                    -v /etc/passwd:/etc/passwd:ro \
                    -v /etc/group:/etc/group:ro \
+                   -u "$(id -u $USER):$(id -g $USER)" \
                    -it $USER \
                     /bin/bash -c \
                     "pkg update -y && \
