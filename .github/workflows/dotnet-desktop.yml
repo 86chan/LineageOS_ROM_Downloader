@@ -101,7 +101,7 @@ jobs:
         docker run --rm --privileged -v "$(pwd)":/src termux/termux-docker:aarch64 /bin/bash -c \
          "pkg update -y && \
          pkg install -y wget termux-tools && \
-         wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh && \
+         curl -L https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh && \
          bash dotnet-install.sh --channel ${{ inputs.dotnet_version }} && \
          cd /src && \
          dotnet publish src/LineageOS_ROM_Downloader/LineageOS_ROM_Downloader.csproj -c Release -r linux-arm64 -o ./publish/termux-arm64"
