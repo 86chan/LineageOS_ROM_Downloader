@@ -1,9 +1,12 @@
-# This workflow will build and publish a .NET project for multiple runtimes.
+# This workflow will build, publish, and release a .NET project for multiple runtimes.
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: .NET Build and Publish
+name: .NET Build, Publish, and Release
 
 on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+' # Trigger on version tags like v1.2.3
   workflow_dispatch:
     inputs:
       dotnet_version:
@@ -25,6 +28,11 @@ on:
           - 'linux-arm64'
           - 'osx-x64'
           - 'osx-arm64'
+          - 'release-push'
+      release_tag:
+        description: 'リリース用のタグ名 (例: v1.2.3)。`release-push`選択時のみ使用。'
+        required: false
+        type: string
 
 jobs:
   build-and-publish:
@@ -35,10 +43,8 @@ jobs:
       # 失敗したジョブがあっても、他のジョブは継続
       fail-fast: false
       matrix:
-        # 'all' が選択された場合は全ランタイムを、それ以外は選択されたランタイムをビルド対象にする
-        rid: ${{ github.event.inputs.target_runtime == 'all' && fromJSON('["win-x64", "win-x86", "win-arm64", "linux-x64", "linux-arm64", "osx-x64", "osx-arm64"]') || fromJSON(format('["{0}"]', github.event.inputs.target_runtime)) }}
-    env:
-      PROJ: "/home/runner/work/LineageOS_ROM_Downloader/LineageOS_ROM_Downloader/src/LineageOS_ROM_Downloader/LineageOS_ROM_Downloader.csproj"
+        # 'all', 'release-push', またはタグプッシュの場合は全ランタイムを、それ以外は選択されたランタイムをビルド対象にする
+        rid: ${{ (startsWith(github.ref, 'refs/tags/') || github.event.inputs.target_runtime == 'all' || github.event.inputs.target_runtime == 'release-push') && fromJSON('["win-x64", "win-x86", "win-arm64", "linux-x64", "linux-arm64", "osx-x64", "osx-arm64"]') || fromJSON(format('["{0}"]', github.event.inputs.target_runtime)) }}
 
     steps:
     - name: Checkout repository
@@ -54,8 +60,7 @@ jobs:
     - name: Publish application
       # プロジェクトを特定のランタイム向けに発行
       # プロジェクトファイルはワイルドカードで指定し、パスの変更に強くする
-      # 出力先もランタイムごとに分ける
-      run: dotnet publish $PROJ -c Release -r ${{ matrix.rid }} -o ./publish/${{ matrix.rid }}
+      run: dotnet publish "**/*.csproj" -c Release -r ${{ matrix.rid }} --self-contained true -o ./publish/${{ matrix.rid }}
       
     - name: Upload Artifact
       # ランタイムごとに個別の成果物としてアップロード
@@ -64,3 +69,48 @@ jobs:
         name: build-output-${{ matrix.rid }}
         path: ./publish/${{ matrix.rid }}
         retention-days: 7 # 成果物の保持期間 (任意)
+
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    # タグがプッシュされた時、または 'release-push' が選択された時のみ実行
+    if: startsWith(github.ref, 'refs/tags/') || github.event.inputs.target_runtime == 'release-push'
+    # build-and-publishジョブの完了を待つ
+    needs: build-and-publish
+    permissions:
+      # GitHub Releasesを作成・編集するために必要
+      contents: write
+
+    steps:
+    - name: Download all artifacts
+      # すべてのビルド成果物をダウンロード
+      uses: actions/download-artifact@v4
+      with:
+        # ダウンロード先ディレクトリ
+        path: artifacts/
+
+    - name: Fail if release_tag is missing on manual trigger
+      # 'release-push' 実行時に release_tag が空でないことを確認
+      if: github.event.inputs.target_runtime == 'release-push' && github.event.inputs.release_tag == ''
+      run: |
+        echo "Error: 'release_tag' is required when 'target_runtime' is 'release-push'."
+        exit 1
+
+    - name: Create Release and Upload Assets
+      # GitHub Releaseを作成し、ビルド成果物をアップロード
+      uses: softprops/action-gh-release@v2
+      with:
+        # 手動リリースの場合は入力値を、タグプッシュの場合はタグ名をタグとして使用
+        tag_name: ${{ github.event.inputs.release_tag || github.ref_name }}
+        # リリースノートを自動生成
+        generate_release_notes: true
+        # アップロードするファイルのパスをワイルドカードで指定
+        # 各ランタイムのフォルダ内にあるすべてのファイルを対象とする
+        files: |
+          artifacts/build-output-win-x64/*
+          artifacts/build-output-win-x86/*
+          artifacts/build-output-win-arm64/*
+          artifacts/build-output-linux-x64/*
+          artifacts/build-output-linux-arm64/*
+          artifacts/build-output-osx-x64/*
+          artifacts/build-output-osx-arm64/*
