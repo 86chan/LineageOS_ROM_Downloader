@@ -1,0 +1,64 @@
+# This workflow will build and publish a .NET project for multiple runtimes.
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET Build and Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      dotnet_version:
+        description: '.NET SDK のバージョン'
+        required: true
+        default: '9.0'
+        type: string
+      target_runtime:
+        description: 'ビルド対象のランタイム'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - 'all'
+          - 'win-x64'
+          - 'win-x86'
+          - 'win-arm64'
+          - 'linux-x64'
+          - 'linux-arm64'
+          - 'osx-x64'
+          - 'osx-arm64'
+
+jobs:
+  build-and-publish:
+    # ジョブ名にマトリックスのランタイムIDを表示
+    name: Build for ${{ matrix.rid }}
+    runs-on: ubuntu-latest
+    strategy:
+      # 失敗したジョブがあっても、他のジョブは継続
+      fail-fast: false
+      matrix:
+        # 'all' が選択された場合は全ランタイムを、それ以外は選択されたランタイムをビルド対象にする
+        rid: ${{ github.event.inputs.target_runtime == 'all' && fromJSON('["win-x64", "win-x86", "win-arm64", "linux-x64", "linux-arm64", "osx-x64", "osx-arm64"]') || fromJSON(format('["{0}"]', github.event.inputs.target_runtime)) }}
+
+    steps:
+    - name: Checkout repository
+      # リポジトリのコードをチェックアウト
+      uses: actions/checkout@v4
+
+    - name: Setup .NET SDK
+      # 指定されたバージョンの.NET SDKをセットアップ
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ inputs.dotnet_version }}
+
+    - name: Publish application
+      # プロジェクトを特定のランタイム向けに発行
+      # プロジェクトファイルはワイルドカードで指定し、パスの変更に強くする
+      # 出力先もランタイムごとに分ける
+      run: dotnet publish "**/*.csproj" -c Release -r ${{ matrix.rid }} --self-contained true -o ./publish/${{ matrix.rid }}
+
+    - name: Upload Artifact
+      # ランタイムごとに個別の成果物としてアップロード
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-output-${{ matrix.rid }}
+        path: ./publish/${{ matrix.rid }}
+        retention-days: 7 # 成果物の保持期間 (任意)
