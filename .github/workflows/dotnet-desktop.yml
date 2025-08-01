@@ -101,9 +101,8 @@ jobs:
         docker run --rm --privileged -v "$(pwd)":/src termux/termux-docker:aarch64 /bin/bash -c \
          "pkg update -y && \
          pkg install -y wget && \
-         wget https://raw.githubusercontent.com/EXALAB/DOTNET-INSTALLER/main/dotnet-install.sh && \
-         bash dotnet-install.sh && \
-         source /data/data/com.termux/files/usr/etc/profile.d/dotnet.sh && \
+         wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh && \
+         bash dotnet-install.sh --channel 9.0 && \
          cd /src && \
          dotnet publish src/LineageOS_ROM_Downloader/LineageOS_ROM_Downloader.csproj -c Release -r linux-arm64 -o ./publish/termux-arm64"
 
