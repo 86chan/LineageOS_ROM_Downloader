@@ -28,6 +28,7 @@ on:
           - 'linux-arm64'
           - 'osx-x64'
           - 'osx-arm64'
+          - 'termux-arm64'
           - 'release-push'
       release_tag:
         description: 'リリース用のタグ名 (例: v1.2.3)。`release-push`選択時のみ使用。'
@@ -73,13 +74,39 @@ jobs:
         path: ./publish/${{ matrix.rid }}
         retention-days: 7 # 成果物の保持期間 (任意)
 
+  build-termux:
+    name: Build for Termux (ARM64)
+    runs-on: ubuntu-latest
+    # Termuxが選択された場合、または全ビルド・リリースの場合に実行
+    if: contains(fromJSON('["all", "release-push", "termux-arm64"]'), github.event.inputs.target_runtime) || startsWith(github.ref, 'refs/tags/')
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Build using Termux Docker container
+      # Termuxのビルド環境を再現したDockerコンテナ内でビルドを実行
+      run: |
+        docker run --rm -v "$(pwd)":/src termux/termux-docker:aarch64 /bin/bash -c \
+        "pkg update -y && \
+         pkg install -y dotnet-sdk-9 && \
+         cd /src && \
+         dotnet publish src/LineageOS_ROM_Downloader/LineageOS_ROM_Downloader.csproj -c Release -r linux-arm64 -o ./publish/termux-arm64"
+
+    - name: Upload Termux Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-output-termux-arm64
+        path: ./publish/termux-arm64
+        retention-days: 7
+
   release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
     # タグがプッシュされた時、または 'release-push' が選択された時のみ実行
     if: startsWith(github.ref, 'refs/tags/') || github.event.inputs.target_runtime == 'release-push'
-    # build-and-publishジョブの完了を待つ
-    needs: build-and-publish
+    # すべてのビルドジョブの完了を待つ
+    needs: [build-and-publish, build-termux]
     permissions:
       # GitHub Releasesを作成・編集するために必要
       contents: write
