@@ -99,7 +99,7 @@ jobs:
       # Termuxのビルド環境を再現したDockerコンテナ内でビルドを実行
       run: |
         docker run --rm --privileged -v "$(pwd)":/src termux/termux-docker:aarch64 -c \
-         pkg update -y && \
+         "pkg update -y && \
          pkg install -y dotnet-sdk && \
          cd /src && \
          dotnet publish src/LineageOS_ROM_Downloader/LineageOS_ROM_Downloader.csproj -c Release -r linux-arm64 -o ./publish/termux-arm64"
