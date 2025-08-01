@@ -100,9 +100,7 @@ jobs:
       run: |
         docker run --rm --privileged -v "$(pwd)":/src termux/termux-docker:aarch64 /bin/bash -c \
          "pkg update -y && \
-         pkg install -y termux-tools && \
-         curl -L https://grimler.se/termux-packages-24/pool/main/d/dotnet-sdk-9.0/dotnet-sdk-9.0_9.0.7_aarch64.deb -o dotnet-sdk-9.0_9.0.7_aarch64.deb && \
-         apt install dotnet-sdk-9.0_9.0.7_aarch64.deb -y && \
+         pkg install -y dotnet-sdk-9.0  && \
          cd /src && \
          /data/data/com.termux/files/home/.dotnet/dotnet publish src/LineageOS_ROM_Downloader/LineageOS_ROM_Downloader.csproj -c Release -r linux-arm64 -o ./publish/termux-arm64"
 
