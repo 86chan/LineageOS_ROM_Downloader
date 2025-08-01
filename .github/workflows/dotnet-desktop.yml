@@ -102,8 +102,8 @@ jobs:
                    --privileged \
                    termux/termux-docker:aarch64 \
                    -v "$(pwd)":/src \
-                   -v /etc/passwd:/etc/passwd:ro \
-                   -v /etc/group:/etc/group:ro \
+                   -v /etc/passwd:/data/data/com.termux/files/usr/etc/passwd:ro \
+                   -v /etc/group:/data/data/com.termux/files/usr/etc/group:ro \
                    -u "$(id -u $USER):$(id -g $USER)" \
                    -it $USER \
                     /bin/bash -c \
