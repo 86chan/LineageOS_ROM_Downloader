@@ -98,12 +98,10 @@ jobs:
     - name: Build using Termux Docker container
       # Termuxのビルド環境を再現したDockerコンテナ内でビルドを実行
       run: |
-        docker run --rm --platform linux/arm64 -e TERM=xterm -v "$(pwd)":/src \
-        --entrypoint /data/data/com.termux/files/usr/bin/bash termux/termux-docker:aarch64 -c \
-         "chown -R root /src && \
-         sed -i 's/exit 1/echo \"Warning: Bypassing root check for pkg.\"/g' /data/data/com.termux/files/usr/bin/pkg && \
-         pkg update -y && \
+        docker run --rm --privileged -v "$(pwd)":/src termux/termux-docker:aarch64 /bin/bash -c \
+         "pkg update -y && \
          pkg install -y dotnet-sdk-9.0  && \
+         chmod 777 -R /src
          cd /src && \
          dotnet publish src/LineageOS_ROM_Downloader/LineageOS_ROM_Downloader.csproj -c Release -r linux-arm64 -o ./publish/termux-arm64"
 
