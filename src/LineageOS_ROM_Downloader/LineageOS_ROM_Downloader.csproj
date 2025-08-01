@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <!-- ビルド環境に応じてRuntimeIdentifierを自動設定 -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <!-- OS部分を判定 -->
+    <RidOS Condition="$([MSBuild]::IsOSPlatform('Windows'))">win</RidOS>
+    <RidOS Condition="$([MSBuild]::IsOSPlatform('Linux'))">linux</RidOS>
+    <RidOS Condition="$([MSBuild]::IsOSPlatform('OSX'))">osx</RidOS>
+    
+    <!-- アーキテクチャ部分を判定。より堅牢な方法に変更 -->
+    <RidArch>$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString().ToLower())</RidArch>
+    
+    <!-- コマンドラインで指定されていない場合のみ、自動判定した値を設定 -->
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">$(RidOS)-$(RidArch)</RuntimeIdentifier>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <!-- 自己完結型単一ファイルの基本設定 -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    
+    <!-- パフォーマンスとファイルサイズの最適化設定 -->
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <PublishTrimmed>true</PublishTrimmed>
+    <TrimMode>link</TrimMode>
+    <TieredPGO>true</TieredPGO>
+    <Optimize>true</Optimize>
+
+    <!-- デバッグ情報の削除 -->
+    <DebugType>None</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    
+    <!-- 出力先ディレクトリ -->
+    <PublishDir>$(MSBuildProjectDirectory)/../publish/$(TargetFramework)/$(RuntimeIdentifier)</PublishDir>
+  </PropertyGroup>
+
+</Project>

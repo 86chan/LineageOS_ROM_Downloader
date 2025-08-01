@@ -1,0 +1,188 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "dotnet",
+			"task": "build",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "build"
+		},
+		{
+			"label": "Clean",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"clean"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/src"
+			},
+			"problemMatcher": "$msCompile",
+			"group": "build",
+			"detail": "dotnet cleanコマンドを実行して、中間ファイルと出力ファイルを削除します。"
+		},
+		{
+			"label": "Clean (Force)",
+			"type": "shell",
+			"command": "rm -rf bin obj",
+			"windows": {
+				"command": "cmd",
+				"args": [
+					"/c",
+					"if exist bin (rmdir /s /q bin) & if exist obj (rmdir /s /q obj)"
+				]
+			},
+			"options": {
+				"cwd": "${workspaceFolder}/src/${workspaceFolderBasename}"
+			},
+			"problemMatcher": [],
+			"group": "build",
+			"detail": "binおよびobjフォルダを強制的に削除します。"
+		},
+		{
+			"label": "Publish (auto-detect)",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"publish",
+				"-c",
+				"Release"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/src"
+			},
+			"problemMatcher": "$msCompile",
+			"group": {
+				"kind": "build",
+			},
+			"detail": "csprojの定義に基づき、現在の環境に最適な実行ファイルを生成します。"
+		},
+		{
+			"label": "Publish: win-x64",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"publish",
+				"-c",
+				"Release",
+				"-r",
+				"win-x64"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/src"
+			},
+			"problemMatcher": "$msCompile",
+			"group": "build",
+			"detail": "Windows (x64) 向けの実行ファイルを生成します。"
+		},
+		{
+			"label": "Publish: win-x86",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"publish",
+				"-c",
+				"Release",
+				"-r",
+				"win-x86"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/src"
+			},
+			"problemMatcher": "$msCompile",
+			"group": "build",
+			"detail": "Windows (x86) 向けの実行ファイルを生成します。"
+		},
+		{
+			"label": "Publish: win-arm64",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"publish",
+				"-c",
+				"Release",
+				"-r",
+				"win-arm64"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/src"
+			},
+			"problemMatcher": "$msCompile",
+			"group": "build",
+			"detail": "Windows (ARM64) 向けの実行ファイルを生成します。"
+		},
+		{
+			"label": "Publish: linux-x64",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"publish",
+				"-c",
+				"Release",
+				"-r",
+				"linux-x64"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/src"
+			},
+			"problemMatcher": "$msCompile",
+			"group": "build",
+			"detail": "Linux (x64) 向けの実行ファイルを生成します。"
+		},
+		{
+			"label": "Publish: linux-arm64",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"publish",
+				"-c",
+				"Release",
+				"-r",
+				"linux-arm64"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/src"
+			},
+			"problemMatcher": "$msCompile",
+			"group": "build",
+			"detail": "Linux (ARM64) 向けの実行ファイルを生成します。"
+		},
+		{
+			"label": "Publish: osx-x64",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"publish",
+				"-c",
+				"Release",
+				"-r",
+				"osx-x64"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/src"
+			},
+			"problemMatcher": "$msCompile",
+			"group": "build",
+			"detail": "macOS (Intel x64) 向けの実行ファイルを生成します。"
+		},
+		{
+			"label": "Publish: osx-arm64",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"publish",
+				"-c",
+				"Release",
+				"-r",
+				"osx-arm64"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/src"
+			},
+			"problemMatcher": "$msCompile",
+			"group": "build",
+			"detail": "macOS (Apple Silicon) 向けの実行ファイルを生成します。"
+		}
+	]
+}
