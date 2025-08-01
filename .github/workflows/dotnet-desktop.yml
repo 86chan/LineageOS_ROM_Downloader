@@ -108,7 +108,6 @@ jobs:
             /bin/bash -c \
          "pkg update -y && \
          pkg install -y dotnet-sdk-9.0  && \
-         chmod 777 -R /src
          cd /src && \
          dotnet publish src/LineageOS_ROM_Downloader/LineageOS_ROM_Downloader.csproj -c Release -r linux-arm64 -o ./publish/termux-arm64"
 
