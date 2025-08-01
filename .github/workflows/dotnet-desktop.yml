@@ -62,7 +62,6 @@ jobs:
 
     - name: Publish application
       # プロジェクトを特定のランタイム向けに発行
-      # プロジェクトファイルはワイルドカードで指定し、パスの変更に強くする
       # 出力先もランタイムごとに分ける
       run: dotnet publish $PROJ -c Release -r ${{ matrix.rid }} -o ./publish/${{ matrix.rid }}
       
@@ -93,6 +92,20 @@ jobs:
         # ダウンロード先ディレクトリ
         path: artifacts/
 
+    - name: Rename executables for release
+      # リリース用に実行ファイル名を変更
+      run: |
+        for dir in artifacts/build-output-*; do
+          if [ -d "$dir" ]; then
+            rid=$(basename "$dir" | sed 's/build-output-//')
+            if [ -f "$dir/LineageOS_ROM_Downloader" ]; then
+              mv "$dir/LineageOS_ROM_Downloader" "$dir/LineageOS_ROM_Downloader-$rid"
+            elif [ -f "$dir/LineageOS_ROM_Downloader.exe" ]; then
+              mv "$dir/LineageOS_ROM_Downloader.exe" "$dir/LineageOS_ROM_Downloader-$rid.exe"
+            fi
+          fi
+        done
+
     - name: Fail if release_tag is missing on manual trigger
       # 'release-push' 実行時に release_tag が空でないことを確認
       if: github.event.inputs.target_runtime == 'release-push' && github.event.inputs.release_tag == ''
@@ -109,12 +122,5 @@ jobs:
         # リリースノートを自動生成
         generate_release_notes: true
         # アップロードするファイルのパスをワイルドカードで指定
-        # 各ランタイムのフォルダ内にあるすべてのファイルを対象とする
-        files: |
-          artifacts/build-output-win-x64/*
-          artifacts/build-output-win-x86/*
-          artifacts/build-output-win-arm64/*
-          artifacts/build-output-linux-x64/*
-          artifacts/build-output-linux-arm64/*
-          artifacts/build-output-osx-x64/*
-          artifacts/build-output-osx-arm64/*
+        # artifactsディレクトリ内のすべてのファイルを対象とする
+        files: artifacts/**/*
