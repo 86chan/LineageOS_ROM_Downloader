@@ -107,7 +107,10 @@ jobs:
                     "pkg update -y && \
                     pkg install -y dotnet-sdk-9.0 && \
                     cd /data/data/com.termux/files/home/src && \
-                    dotnet publish src/LineageOS_ROM_Downloader/LineageOS_ROM_Downloader.csproj -c Release -o ./publish/termux-arm64"
+                    dotnet publish src/LineageOS_ROM_Downloader/LineageOS_ROM_Downloader.csproj \
+                    -c Release \
+                    -p:PublishReadyToRun=false \
+                    -o ./publish/termux-arm64"
 
     - name: Upload Termux Artifact
       uses: actions/upload-artifact@v4
