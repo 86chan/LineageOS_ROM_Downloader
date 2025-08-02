@@ -100,7 +100,7 @@ jobs:
       run: |
           docker run --rm \
                     --privileged \
-                    -v "$(pwd)":/data/data/com.termux/files/home/src \
+                    -v "$(pwd)":/data/data/com.termux/files/home/src:z \
                     termux/termux-docker:aarch64 \
                     /bin/bash -c \
                     "pkg update -y && \
