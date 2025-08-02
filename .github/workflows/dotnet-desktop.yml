@@ -101,7 +101,6 @@ jobs:
           docker run --rm \
                     --privileged \
                     -v "$(pwd)":/mnt/src \
-                    --user $(id -u):$(id -g) \
                     termux/termux-docker:aarch64 \
                     /bin/bash -c \
                     "pkg update -y && \
