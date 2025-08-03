@@ -40,6 +40,8 @@ jobs:
     # ジョブ名にマトリックスのランタイムIDを表示
     name: Build for ${{ matrix.rid }}
     runs-on: ubuntu-latest
+    # `termux-arm64`が選択された場合はこのジョブをスキップ
+    if: github.event.inputs.target_runtime != 'termux-arm64'
     strategy:
       # 失敗したジョブがあっても、他のジョブは継続
       fail-fast: false
