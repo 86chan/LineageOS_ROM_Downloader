@@ -72,16 +72,20 @@ public partial class Program
 
             // コマンドライン引数に基づいて、ダウンロード対象のファイルを絞り込み
             var filesToProcess = FilterFiles(latestGroup.Files, imgTypes);
+            
+            var deviceDownloadDir = Path.Combine(rootDownloadDirectory, device);
+            Directory.CreateDirectory(deviceDownloadDir);
+
 
             // 対象の各ファイルについて、ダウンロードまたは移動処理を実行
             foreach (var fileToDownload in filesToProcess)
             {
                 await ProcessFileAsync(
-                    client, fileToDownload, latestGroup, previousGroup, rootDownloadDirectory);
+                    client, fileToDownload, latestGroup, previousGroup, deviceDownloadDir);
             }
 
             // 最新ビルド以外の古い日付フォルダを削除
-            CleanupOldBuilds(latestGroup, rootDownloadDirectory);
+            CleanupOldBuilds(latestGroup, deviceDownloadDir);
         }
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
         {
