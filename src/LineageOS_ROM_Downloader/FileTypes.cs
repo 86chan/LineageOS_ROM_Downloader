@@ -32,12 +32,12 @@ public static class FileTypes
         /// <summary>
         /// ファイル名
         /// </summary>
-        public const string FileName = "boot";
+        public const string FileName = "boot.img";
 
         /// <summary>
         /// 略称
         /// </summary>
-        public const string ShortName = "boot.img";
+        public const string ShortName = "boot";
     }
     
     /// <summary>
@@ -48,12 +48,12 @@ public static class FileTypes
         /// <summary>
         /// ファイル名
         /// </summary>
-        public const string FileName = "dtbo";
+        public const string FileName = "dtbo.img";
 
         /// <summary>
         /// 略称
         /// </summary>
-        public const string ShortName = "dtbo.img";
+        public const string ShortName = "dtbo";
     }
     
     /// <summary>
@@ -64,12 +64,12 @@ public static class FileTypes
         /// <summary>
         /// ファイル名
         /// </summary>
-        public const string FileName = "recovery";
+        public const string FileName = "recovery.img";
 
         /// <summary>
         /// 略称
         /// </summary>
-        public const string ShortName = "recovery.img";
+        public const string ShortName = "recovery";
     }
     
     /// <summary>
@@ -80,12 +80,12 @@ public static class FileTypes
         /// <summary>
         /// ファイル名
         /// </summary>
-        public const string FileName = "init_boot";
+        public const string FileName = "init_boot.img";
 
         /// <summary>
         /// 略称
         /// </summary>
-        public const string ShortName = "init_boot.img";
+        public const string ShortName = "init_boot";
     }
     
     /// <summary>
@@ -96,12 +96,12 @@ public static class FileTypes
         /// <summary>
         /// ファイル名
         /// </summary>
-        public const string FileName = "super_empty";
+        public const string FileName = "super_empty.img";
 
         /// <summary>
         /// 略称
         /// </summary>
-        public const string ShortName = "super_empty.img";
+        public const string ShortName = "super_empty";
     }
     
     /// <summary>
@@ -112,12 +112,12 @@ public static class FileTypes
         /// <summary>
         /// ファイル名
         /// </summary>
-        public const string FileName = "vbmeta";
+        public const string FileName = "vbmeta.img";
 
         /// <summary>
         /// 略称
         /// </summary>
-        public const string ShortName = "vbmeta.img";
+        public const string ShortName = "vbmeta";
     }
     
     /// <summary>
@@ -128,12 +128,12 @@ public static class FileTypes
         /// <summary>
         /// ファイル名
         /// </summary>
-        public const string FileName = "vendor_boot";
+        public const string FileName = "vendor_boot.img";
 
         /// <summary>
         /// 略称
         /// </summary>
-        public const string ShortName = "vendor_boot.img";
+        public const string ShortName = "vendor_boot";
     }
 
     /// <summary>
