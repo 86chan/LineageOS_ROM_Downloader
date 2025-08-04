@@ -5,12 +5,49 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug",
+            "name": "Debug-research",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/${workspaceFolderBasename}/bin/Debug/net9.0/${workspaceFolderBasename}.dll"
+            "program": "${workspaceFolder}/src/${workspaceFolderBasename}/bin/Debug/net9.0/${workspaceFolderBasename}.dll",
+            "args": [
+                "-d",
+                "renoir",
+                "--research"
+            ],
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "Debug-rom",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/${workspaceFolderBasename}/bin/Debug/net9.0/${workspaceFolderBasename}.dll",
+            "args": [
+                "-d",
+                "renoir",
+                "-p",
+                "./",
+                "-img",
+                "rom"
+            ],
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "Debug-vendor_boot",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/${workspaceFolderBasename}/bin/Debug/net9.0/${workspaceFolderBasename}.dll",
+            "args": [
+                "-d",
+                "renoir",
+                "-p",
+                "./",
+                "-img",
+                "vendor_boot"
+            ],
+            "console": "integratedTerminal",
         }
-
     ]
 }
