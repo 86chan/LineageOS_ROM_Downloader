@@ -132,7 +132,8 @@ jobs:
     # タグがプッシュされた時、または 'release-push' が選択された時のみ実行
     if: startsWith(github.ref, 'refs/tags/') || github.event.inputs.target_runtime == 'release-push'
     # すべてのビルドジョブの完了を待つ
-    needs: [build-and-publish, build-termux]
+    # needs: [build-and-publish, build-termux]
+    needs: [build-and-publish]
     permissions:
       # GitHub Releasesを作成・編集するために必要
       contents: write
