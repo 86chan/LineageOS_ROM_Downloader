@@ -131,6 +131,60 @@
 			"detail": "Linux (x64) 向けの実行ファイルを生成します。"
 		},
 		{
+			"label": "Publish: linux-musl-x64",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"publish",
+				"-c",
+				"Release",
+				"-r",
+				"linux-musl-x64"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/src"
+			},
+			"problemMatcher": "$msCompile",
+			"group": "build",
+			"detail": "Alpine Linux (x64) などのmusl向けの実行ファイルを生成します。"
+		},
+		{
+			"label": "Publish: linux-musl-arm64",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"publish",
+				"-c",
+				"Release",
+				"-r",
+				"linux-musl-arm64"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/src"
+			},
+			"problemMatcher": "$msCompile",
+			"group": "build",
+			"detail": "Alpine Linux (arm64) などのmusl向けの実行ファイルを生成します。"
+		},
+		{
+			"label": "Publish: linux-arm",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"publish",
+				"-c",
+				"Release",
+				"-r",
+				"linux-arm"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/src"
+			},
+			"problemMatcher": "$msCompile",
+			"group": "build",
+			"detail": "Linux (ARM32) 向けの実行ファイルを生成します。"
+		},
+		{
 			"label": "Publish: linux-arm64",
 			"command": "dotnet",
 			"type": "process",
@@ -147,6 +201,42 @@
 			"problemMatcher": "$msCompile",
 			"group": "build",
 			"detail": "Linux (ARM64) 向けの実行ファイルを生成します。"
+		},
+		{
+			"label": "Publish: linux-bionic-arm64",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"publish",
+				"-c",
+				"Release",
+				"-r",
+				"linux-bionic-arm64"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/src"
+			},
+			"problemMatcher": "$msCompile",
+			"group": "build",
+			"detail": "Termuxなどのbionic libc向けの実行ファイルを生成します。"
+		},
+		{
+			"label": "Publish: linux-loongarch64",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"publish",
+				"-c",
+				"Release",
+				"-r",
+				"linux-loongarch64"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/src"
+			},
+			"problemMatcher": "$msCompile",
+			"group": "build",
+			"detail": "Linux (LoongArch64) 向けの実行ファイルを生成します。"
 		},
 		{
 			"label": "Publish: osx-x64",
@@ -183,6 +273,26 @@
 			"problemMatcher": "$msCompile",
 			"group": "build",
 			"detail": "macOS (Apple Silicon) 向けの実行ファイルを生成します。"
+		},
+		{
+			"label": "Publish: All",
+			"dependsOn": [
+				"Publish: win-x86",
+				"Publish: win-x64",
+				"Publish: win-arm64",
+				"Publish: linux-x64",
+				"Publish: linux-musl-x64",
+				"Publish: linux-musl-arm64",
+				"Publish: linux-arm",
+				"Publish: linux-arm64",
+				"Publish: linux-bionic-arm64",
+				"Publish: linux-loongarch64",
+				"Publish: osx-x64",
+				"Publish: osx-arm64",
+			],
+			"dependsOrder": "sequence",
+			"group": "build",
+			"detail": "すべてのターゲットプラットフォーム向けに発行します。"
 		}
 	]
 }
