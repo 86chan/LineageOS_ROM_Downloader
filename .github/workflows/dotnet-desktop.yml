@@ -40,6 +40,23 @@ on:
         required: false
         type: string
 
+env:
+  ALL_RIDS: > 
+    '[
+      "win-x86"
+      "win-x64"
+      "win-arm64"
+      "linux-x64"
+      "linux-musl-x64"
+      "linux-musl-arm64"
+      "linux-arm"
+      "linux-arm64"
+      "linux-bionic-arm64"
+      "linux-loongarch64"
+      "osx-x64"
+      "osx-arm64"
+    ]'
+
 jobs:
   build-and-publish:
     # ジョブ名にマトリックスのランタイムIDを表示
@@ -47,34 +64,19 @@ jobs:
     runs-on: ubuntu-latest
     # `termux-arm64`が選択された場合はこのジョブをスキップ
     # if: github.event.inputs.target_runtime != 'termux-arm64'
-    env:
-      PROJ: "/home/runner/work/LineageOS_ROM_Downloader/LineageOS_ROM_Downloader/src/LineageOS_ROM_Downloader/LineageOS_ROM_Downloader.csproj"
-      ALL_RIDS: > 
-        '[
-          "win-x86"
-          "win-x64"
-          "win-arm64"
-          "linux-x64"
-          "linux-musl-x64"
-          "linux-musl-arm64"
-          "linux-arm"
-          "linux-arm64"
-          "linux-bionic-arm64"
-          "linux-loongarch64"
-          "osx-x64"
-          "osx-arm64"
-        ]'
     strategy:
       # 失敗したジョブがあっても、他のジョブは継続
       fail-fast: false
       matrix:
         # 'all', 'release-push', またはタグプッシュの場合は全ランタイムを、それ以外は選択されたランタイムをビルド対象にする
-        rid: ${{ (startsWith(github.ref, 'refs/tags/') || 
-             github.event.inputs.target_runtime == 'all' || 
-             github.event.inputs.target_runtime == 'release-push') && 
-             fromJSON(env.ALL_RIDS) || 
+        rid: ${{ (startsWith(github.ref, 'refs/tags/') || \
+             github.event.inputs.target_runtime == 'all' || \
+             github.event.inputs.target_runtime == 'release-push') && \
+             fromJSON(env.ALL_RIDS) || \
              fromJSON(format('["{0}"]', github.event.inputs.target_runtime)) }}
     
+    env:
+      PROJ: "/home/runner/work/LineageOS_ROM_Downloader/LineageOS_ROM_Downloader/src/LineageOS_ROM_Downloader/LineageOS_ROM_Downloader.csproj"
 
     steps:
     - name: Checkout repository
