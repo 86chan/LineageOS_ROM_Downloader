@@ -40,6 +40,7 @@ public static partial class Program
     /// <param name="rootDownloadDir">ダウンロード先のルートディレクトリ</param>
     private static async Task ProcessFileAsync(HttpClient client,
                                                BuildFile fileToDownload,
+                                               int maxThreads,
                                                BuildGroup latestGroup,
                                                BuildGroup? previousGroup,
                                                string rootDownloadDir)
@@ -82,7 +83,7 @@ public static partial class Program
         }
 
         // 新規ダウンロードと検証処理を実行
-        bool success = await TryDownloadAndVerifyAsync(client, fileToDownload, destinationPath);
+        bool success = await TryDownloadAndVerifyAsync(client, fileToDownload, destinationPath, maxThreads);
         if (success)
         {
             // 成功した場合、マーカーファイルを作成
