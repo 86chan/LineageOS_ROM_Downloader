@@ -56,6 +56,19 @@ public partial class Program
             return;
         }
 
+        // デバイス固有のミューテックス名を定義
+        var mutexName = $"Global\\LineageOS_ROM_Downloader_{device}";
+        using var mutex = new Mutex(true, mutexName, out var createdNew);
+
+        // ミューテックスが取得できなかった場合（他のインスタンスが実行中）
+        if (!createdNew)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"警告: デバイス '{device}' の処理が既に実行中です。同時に実行することはできません。");
+            Console.ResetColor();
+            return;
+        }
+
         try
         {
             // メインのダウンロード処理を開始
@@ -74,7 +87,7 @@ public partial class Program
 
             // コマンドライン引数に基づいて、ダウンロード対象のファイルを絞り込み
             var filesToProcess = FilterFiles(latestGroup.Files, imgTypes);
-            
+
             var deviceDownloadDir = Path.Combine(rootDownloadDirectory, device);
             Directory.CreateDirectory(deviceDownloadDir);
 
@@ -102,6 +115,11 @@ public partial class Program
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"\n未処理のエラーが発生しました: {ex.Message}");
             Console.ResetColor();
+        }
+        finally
+        {
+            // プロセス終了時にミューテックスを解放
+            mutex.ReleaseMutex();
         }
     }
 
