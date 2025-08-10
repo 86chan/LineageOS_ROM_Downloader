@@ -30,7 +30,7 @@ on:
           - 'linux-arm'
           - 'linux-arm64'
           - 'linux-bionic-arm64'
-          - 'linux-loongarch64'
+          # - 'linux-loongarch64'
           - 'osx-x64'
           - 'osx-arm64'
           # - 'termux-arm64'
