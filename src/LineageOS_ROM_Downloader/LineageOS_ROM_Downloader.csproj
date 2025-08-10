@@ -15,7 +15,8 @@
     <RidOS Condition="$([MSBuild]::IsOSPlatform('OSX'))">osx</RidOS>
 
     <!-- アーキテクチャ部分を判定。より堅牢な方法に変更 -->
-    <RidArch>$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString().ToLower())</RidArch>
+    <RidArch>
+      $([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString().ToLower())</RidArch>
 
     <!-- コマンドラインで指定されていない場合のみ、自動判定した値を設定 -->
     <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">$(RidOS)-$(RidArch)</RuntimeIdentifier>
@@ -41,5 +42,14 @@
 
     <!-- 出力先ディレクトリ -->
     <PublishDir>$(MSBuildProjectDirectory)/../publish/$(TargetFramework)/$(RuntimeIdentifier)</PublishDir>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-bionic-arm64'">
+    <!-- パフォーマンスとファイルサイズの最適化設定 -->
+    <PublishReadyToRun>false</PublishReadyToRun>
+    <PublishTrimmed>false</PublishTrimmed>
+    <!-- <TrimMode>link</TrimMode> -->
+    <TieredPGO>false</TieredPGO>
+    <Optimize>false</Optimize>
   </PropertyGroup>
 </Project>

@@ -220,24 +220,24 @@
 			"group": "build",
 			"detail": "Termuxなどのbionic libc向けの実行ファイルを生成します。"
 		},
-		{
-			"label": "Publish: linux-loongarch64",
-			"command": "dotnet",
-			"type": "process",
-			"args": [
-				"publish",
-				"-c",
-				"Release",
-				"-r",
-				"linux-loongarch64"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}/src"
-			},
-			"problemMatcher": "$msCompile",
-			"group": "build",
-			"detail": "Linux (LoongArch64) 向けの実行ファイルを生成します。"
-		},
+		// {
+		// 	"label": "Publish: linux-loongarch64",
+		// 	"command": "dotnet",
+		// 	"type": "process",
+		// 	"args": [
+		// 		"publish",
+		// 		"-c",
+		// 		"Release",
+		// 		"-r",
+		// 		"linux-loongarch64"
+		// 	],
+		// 	"options": {
+		// 		"cwd": "${workspaceFolder}/src"
+		// 	},
+		// 	"problemMatcher": "$msCompile",
+		// 	"group": "build",
+		// 	"detail": "Linux (LoongArch64) 向けの実行ファイルを生成します。"
+		// },
 		{
 			"label": "Publish: osx-x64",
 			"command": "dotnet",
@@ -286,7 +286,7 @@
 				"Publish: linux-arm",
 				"Publish: linux-arm64",
 				"Publish: linux-bionic-arm64",
-				"Publish: linux-loongarch64",
+				// "Publish: linux-loongarch64",
 				"Publish: osx-x64",
 				"Publish: osx-arm64",
 			],
