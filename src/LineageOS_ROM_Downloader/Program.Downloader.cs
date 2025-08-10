@@ -147,7 +147,7 @@ public static partial class Program
             var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
             request.Headers.Range = new(range.Start, range.End);
 
-            using var partialResponse = await client.GetAsync(requestUri, HttpCompletionOption.ResponseHeadersRead);
+            using var partialResponse = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
             partialResponse.EnsureSuccessStatusCode();
 
             await using var contentStream = await partialResponse.Content.ReadAsStreamAsync();
