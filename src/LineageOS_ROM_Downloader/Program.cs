@@ -17,6 +17,7 @@ public partial class Program
         string? rootDownloadDirectory = null;
         var imgTypes = new List<string>();
         bool researchMode = false;
+        int maxThreads = 1;
 
         // コマンドライン引数をパースして、各変数に格納
         for (int i = 0; i < args.Length; i++)
@@ -26,6 +27,7 @@ public partial class Program
                 case "-d": if (i + 1 < args.Length) device = args[++i]; break;
                 case "-p": if (i + 1 < args.Length) rootDownloadDirectory = args[++i]; break;
                 case "-img": if (i + 1 < args.Length) imgTypes.Add(args[++i]); break;
+                case "-mt": if (i + 1 < args.Length) maxThreads = int.Parse(args[++i]); break;
                 case "--research": researchMode = true; break;
             }
         }
@@ -81,7 +83,7 @@ public partial class Program
             foreach (var fileToDownload in filesToProcess)
             {
                 await ProcessFileAsync(
-                    client, fileToDownload, latestGroup, previousGroup, deviceDownloadDir);
+                    client, fileToDownload, maxThreads, latestGroup, previousGroup, deviceDownloadDir);
             }
 
             // 最新ビルド以外の古い日付フォルダを削除
@@ -127,7 +129,7 @@ public partial class Program
         Console.Error.WriteLine("エラー: 引数が不足しているか、無効です。");
         Console.ResetColor();
         Console.WriteLine(@$"
-使い方: {execName} -d <デバイス名> -p <ダウンロード先> [-img <種類>] [...]
+使い方: {execName} -d <デバイス名> -p <ダウンロード先> [-img <種類>] [-mt <スレッド数>] [...]
 　または
 使い方: {execName} --research -d <デバイス名>
 
@@ -136,10 +138,13 @@ public partial class Program
   -p        (必須) ダウンロード先のルートパス
   -img      (任意) ダウンロードするファイルの種類。複数指定可能。
             種類: {string.Join(", ", AllKeywords)}, または特定のファイル名
+  -mt       (任意) ダウンロード時の最大並列スレッド数。既定値は1です。
+            あまりにも遅い場合に使用してください。サーバーに負荷を与えます。
   --research  指定されたデバイスで利用可能なファイルの種類を調査します。
 
 使用例:
   {execName} -d renoir -p ./LineageBuilds -img rom -img recovery
+  {execName} -d renoir -p ./LineageBuilds -img rom -mt 4
   {execName} --research -d renoir");
     }
 }
