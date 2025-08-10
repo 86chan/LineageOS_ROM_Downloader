@@ -47,7 +47,7 @@ public static partial class Program
                     var stopwatch = Stopwatch.StartNew();
                     var progressReporter = new Progress<DownloadProgress>(progress =>
                     {
-                        var speed = progress.TotalBytesRead / (stopwatch.Elapsed.TotalSeconds + 1e-9) / 1024; // KB/s
+                        var speed = progress.TotalBytesRead / (stopwatch.Elapsed.TotalSeconds + 1e-9); // B/s
                         DisplayDownloadProgress(progress.TotalBytes, progress.TotalBytesRead, speed);
                     });
 
@@ -164,7 +164,7 @@ public static partial class Program
                 Interlocked.Add(ref totalBytesRead, bytesRead);
 
                 // グローバルな進捗を更新
-                var speed = totalBytesRead / (stopwatch.Elapsed.TotalSeconds + 1e-9) / 1024; // KB/s
+                var speed = totalBytesRead / (stopwatch.Elapsed.TotalSeconds + 1e-9); // B/s
                 DisplayDownloadProgress(totalBytes, totalBytesRead, speed);
             }
         })).ToList();
@@ -277,11 +277,21 @@ public static partial class Program
         });
     }
 
-    private static void DisplayDownloadProgress(long totalBytes, long totalBytesRead, double speed)
+    private static void DisplayDownloadProgress(long totalBytes, long totalBytesRead, double bytesPerSecond)
     {
         Console.Write($"\r進捗: {(double)totalBytesRead / totalBytes * 100:F2}% " +
                       $"({totalBytesRead / 1024.0 / 1024.0:F2} MB / {totalBytes / 1024.0 / 1024.0:F2} MB) " +
-                      $"速度: {speed:F2} KB/s");
+                      $"速度: {FormatSpeed(bytesPerSecond)}");
+    }
+
+    private static string FormatSpeed(double bytesPerSecond)
+    {
+        return bytesPerSecond switch
+        {
+            < 1024 * 1024 => $"{bytesPerSecond / 1024:F2} KB/s",
+            < 1024 * 1024 * 1024 => $"{bytesPerSecond / (1024 * 1024):F2} MB/s",
+            _ => $"{bytesPerSecond / (1024 * 1024 * 1024):F2} GB/s"
+        };
     }
 }
 
