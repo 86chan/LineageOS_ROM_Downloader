@@ -277,19 +277,47 @@ public static partial class Program
         });
     }
 
+    /// <summary>
+    /// ダウンロードの進捗状況をコンソールに表示
+    /// </summary>
+    /// <param name="totalBytes">ダウンロードする合計バイト数</param>
+    /// <param name="totalBytesRead">既にダウンロードされたバイト数</param>
+    /// <param name="bytesPerSecond">秒間あたりのダウンロード速度（バイト/秒）</param>
+    /// <remarks>
+    /// 進捗率、ダウンロード済みサイズ/合計サイズ、現在のダウンロード速度をコンソールに表示します。
+    /// 例: 進捗: 50.00% (5.00 MB / 10.00 MB) 速度: 1.25 MB/s
+    /// </remarks>
     private static void DisplayDownloadProgress(long totalBytes, long totalBytesRead, double bytesPerSecond)
     {
+        // コンソールに進捗情報を一行で表示し、キャリッジリターン(\r)で常に行頭から上書きします
         Console.Write($"\r進捗: {(double)totalBytesRead / totalBytes * 100:F2}% " +
                       $"({totalBytesRead / 1024.0 / 1024.0:F2} MB / {totalBytes / 1024.0 / 1024.0:F2} MB) " +
                       $"速度: {FormatSpeed(bytesPerSecond)}");
     }
 
+    /// <summary>
+    /// バイト/秒の速度を適切な単位（KB/s, MB/s, GB/s）にフォーマット
+    /// </summary>
+    /// <param name="bytesPerSecond">秒間あたりのダウンロード速度（バイト/秒）</param>
+    /// <returns>
+    /// フォーマットされた速度を表す文字列
+    /// </returns>
+    /// <remarks>
+    /// 速度に応じて単位を自動的に調整し、小数点以下2桁まで表示します。
+    /// - 1MB未満: KB/s
+    /// - 1GB未満: MB/s
+    /// - 1GB以上: GB/s
+    /// </remarks>
     private static string FormatSpeed(double bytesPerSecond)
     {
+        // switch式を使用して、速度の値に応じて適切な単位に変換して返します
         return bytesPerSecond switch
         {
+            // 1MB (1024 * 1024 bytes) 未満の場合は KB/s に変換
             < 1024 * 1024 => $"{bytesPerSecond / 1024:F2} KB/s",
+            // 1GB (1024 * 1024 * 1024 bytes) 未満の場合は MB/s に変換
             < 1024 * 1024 * 1024 => $"{bytesPerSecond / (1024 * 1024):F2} MB/s",
+            // それ以上の場合は GB/s に変換
             _ => $"{bytesPerSecond / (1024 * 1024 * 1024):F2} GB/s"
         };
     }
