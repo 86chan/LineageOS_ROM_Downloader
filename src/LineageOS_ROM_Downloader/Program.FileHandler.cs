@@ -103,32 +103,35 @@ public static partial class Program
     /// <summary>
     /// 旧バージョンの日付フォルダを削除
     /// </summary>
-    /// <param name="latestGroup">最新のビルドグループ情報</param>
     /// <param name="rootDownloadDir">ダウンロード先のルートディレクトリ</param>
-    private static void CleanupOldBuilds(BuildGroup latestGroup, string rootDownloadDir)
+    /// <param name="keepCount">クリーンアップ時に残す世代数</param>
+    private static void CleanupOldBuilds(string rootDownloadDir, int keepCount)
     {
-        Console.WriteLine("\n--- 旧バージョンのクリーンアップ ---");
+        Console.WriteLine($"\n--- 旧バージョンのクリーンアップ (最新 {keepCount} 世代を保持) ---");
         var deletedCount = 0;
 
-        // ルートディレクトリ内のすべての日付フォルダをチェック
-        foreach (var dirPath in Directory.GetDirectories(rootDownloadDir))
+        // 日付フォルダを取得し、名前の降順（新しいものが先）にソート
+        var dateDirs = Directory.GetDirectories(rootDownloadDir)
+                                .OrderByDescending(d => Path.GetFileName(d))
+                                .ToList();
+
+        // 保持する数を超えたフォルダを削除対象とする
+        var dirsToDelete = dateDirs.Skip(keepCount).ToList();
+
+        foreach (var dirPath in dirsToDelete)
         {
             var dirName = Path.GetFileName(dirPath);
-            // 最新ビルドのフォルダでなければ削除対象とする
-            if (dirName != latestGroup.DateDirectoryName)
+            try
             {
-                try
-                {
-                    Directory.Delete(dirPath, true);
-                    Console.WriteLine($" -> フォルダを削除しました: {dirName}");
-                    deletedCount++;
-                }
-                catch (Exception ex)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($" -> エラー: フォルダ '{dirName}' の削除に失敗しました。({ex.Message})");
-                    Console.ResetColor();
-                }
+                Directory.Delete(dirPath, true);
+                Console.WriteLine($" -> フォルダを削除しました: {dirName}");
+                deletedCount++;
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($" -> エラー: フォルダ '{dirName}' の削除に失敗しました。({ex.Message})");
+                Console.ResetColor();
             }
         }
 
