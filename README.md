@@ -55,7 +55,7 @@ LineageOS_ROM_Downloader --research -d pioneer
 
 ## ダウンロード (Downloads)
 
-このツールは、.NET 9.0 SDKを使ってご自身でビルドする代わりに、GitHubの[リリース](releases)ページから直接ダウンロードすることもできます。
+このツールは、.NET 9.0 SDKを使ってご自身でビルドする代わりに、GitHubの[リリース](https://github.com/86chan/LineageOS_ROM_Downloader/releases)ページから直接ダウンロードすることもできます。
 
 リリースページでは、Windows, Linux, macOS 用の自己完結型実行ファイルが提供されています。これらは.NETランタイムがインストールされていない環境でも動作します。お使いのOSに合ったファイルをダウンロードしてご利用ください。
 

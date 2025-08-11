@@ -55,7 +55,7 @@ LineageOS_ROM_Downloader --research -d pioneer
 
 ## Downloads
 
-Instead of building it yourself, you can also download this tool directly from the [Releases](releases) page on GitHub.
+Instead of building it yourself, you can also download this tool directly from the [Releases](https://github.com/86chan/LineageOS_ROM_Downloader/releases) page on GitHub.
 
 The releases page provides self-contained executables for Windows, Linux, and macOS. These will work even without the .NET runtime installed. Please download the appropriate file for your operating system.
 
