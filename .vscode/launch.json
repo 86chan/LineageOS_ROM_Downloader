@@ -5,6 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug-help",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/${workspaceFolderBasename}/bin/Debug/net9.0/${workspaceFolderBasename}.dll",
+            "args": [
+            ],
+            "console": "integratedTerminal",
+        },
+        {
             "name": "Debug-research",
             "type": "coreclr",
             "request": "launch",
