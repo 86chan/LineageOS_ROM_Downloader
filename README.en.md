@@ -1,5 +1,7 @@
 # LineageOS ROM Downloader
 
+[日本語 ver.](./README.md)
+
 A command-line tool for downloading LineageOS ROMs and other build artifacts for your device.
 
 This tool automates the process of fetching the latest builds from the official LineageOS download portal, verifying file integrity, and managing old builds.
@@ -25,14 +27,14 @@ LineageOS_ROM_Downloader -d <device_codename> -p <download_path> -img rom -img r
 
 ### Command-Line Options
 
-| Option     | Description                                                                                                 |
-| :--------- | :---------------------------------------------------------------------------------------------------------- |
-| `-d`       | **(Required)** The codename of your device (e.g., `renoir`, `pioneer`).                                       |
-| `-p`       | **(Required)** The root path where files will be downloaded.                                                 |
-| `-img`     | (Optional) The type of file to download. Can be specified multiple times. Common types are `rom`, `recovery`, `boot`. Use `--research` to find all available types. |
-| `-mt`      | (Optional) The maximum number of parallel threads for downloading. Defaults to 1. Use with caution.         |
-| `-k`       | (Optional) The number of recent builds to keep during cleanup. Defaults to 1.                               |
-| `--research` | A special mode to list all available file types for a specific device without downloading anything.       |
+| Option       | Description                                                                                                                                                         |
+| :----------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `-d`         | **(Required)** The codename of your device (e.g., `renoir`, `pioneer`).                                                                                             |
+| `-p`         | **(Required)** The root path where files will be downloaded.                                                                                                        |
+| `-img`       | (Optional) The type of file to download. Can be specified multiple times. Common types are `rom`, `recovery`, `boot`. Use `--research` to find all available types. |
+| `-mt`        | (Optional) The maximum number of parallel threads for downloading. Defaults to 1. Use with caution.                                                                 |
+| `-k`         | (Optional) The number of recent builds to keep during cleanup. Defaults to 1.                                                                                       |
+| `--research` | A special mode to list all available file types for a specific device without downloading anything.                                                                 |
 
 ### Examples
 
